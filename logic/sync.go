@@ -62,6 +62,7 @@ func (s SyncLogic) NewSqlVersionCommand() {
 
 }
 
+// 同步sql文件
 func (s SyncLogic) SyncVersionCommand() {
 	// 获取当前版本号
 	currentVersion, err := s.GetCurrentVersion()
