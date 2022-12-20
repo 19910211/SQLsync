@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 )
 
@@ -15,11 +14,10 @@ type Config struct {
 	Path string `json:",default=./sqlCommandVersion"`
 }
 
-func Load(configFile string) *Config {
+func MustLoad(configFile string) *Config {
 	viper.SetConfigFile(configFile)
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Errorf("error:%+v", err)
-		return nil
+		panic(err)
 	}
 	viper.SetDefault("DataSource.Type", "mysql")
 	viper.SetDefault("DataSource.Table", "version")
@@ -27,8 +25,7 @@ func Load(configFile string) *Config {
 
 	var conf Config
 	if err := viper.Unmarshal(&conf); err != nil {
-		fmt.Errorf("error:%+v", err)
-		return nil
+		panic(err)
 	}
 
 	return &conf

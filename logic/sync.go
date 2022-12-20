@@ -110,7 +110,7 @@ func (s SyncLogic) doSync(sqlFile *SqlFile) error {
 		}
 
 		// 记录当前的版本
-		versionSql := fmt.Sprintf("insert into `%s` values (%s)", s.svcCtx.Config.DataSource.Table, sqlFile.VersionNo())
+		versionSql := fmt.Sprintf("insert into %s values (%s)", s.svcCtx.Config.DataSource.Table, sqlFile.VersionNo())
 		if _, err := tx.Exec(versionSql); err != nil {
 			fmt.Println(fmt.Sprintf("versionSql:%s error:%+v", versionSql, err))
 			return err
@@ -124,7 +124,8 @@ func (s SyncLogic) doSync(sqlFile *SqlFile) error {
 // GetCurrentVersion 获取当前的版本号
 func (s SyncLogic) GetCurrentVersion() (Version, error) {
 	var version *string
-	if err := s.svcCtx.DB.Get(&version, "select max(`version_no`) from version"); err != nil {
+	if err := s.svcCtx.DB.Get(&version, fmt.Sprintf("select max(version_no) from %s", s.svcCtx.Config.DataSource.Table)); err != nil {
+		fmt.Println(fmt.Sprintf("select max(version_no) from %s", s.svcCtx.Config.DataSource.Table))
 		return EmptyVersion, err
 	}
 

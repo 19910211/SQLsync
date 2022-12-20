@@ -13,7 +13,7 @@ var configFile = flag.String("f", "conf.yaml", "the config file")
 
 func main() {
 	//加载配置文件
-	conf := config.Load(*configFile)
+	conf := config.MustLoad(*configFile)
 
 	// 初始化
 	svcCtx := svc.NewServiceContext(conf)
