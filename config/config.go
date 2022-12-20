@@ -7,8 +7,8 @@ import (
 
 type Config struct {
 	DataSource struct {
-		Type  string `json:",optional,default=mysql,options=mysql|postgres"`
-		Table string `json:",default=version"`
+		Type  string `json:",optional,default=mysql"`
+		Table string `json:",optional,default=version"`
 		Url   string
 	}
 
