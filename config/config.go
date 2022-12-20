@@ -7,12 +7,12 @@ import (
 
 type Config struct {
 	DataSource struct {
-		Type  string `json:",optional,default=mysql"`
-		Table string `json:",optional,default=version"`
+		Type  string `mapstructure:"Type,optional,default=mysql"`
+		Table string `mapstructure:"Table,optional,default=version"`
 		Url   string
 	}
 
-	Path string `json:",default=./command"`
+	Path string `json:",default=./sqlCommandVersion"`
 }
 
 func Load(configFile string) *Config {
@@ -21,10 +21,15 @@ func Load(configFile string) *Config {
 		fmt.Errorf("error:%+v", err)
 		return nil
 	}
+	viper.SetDefault("DataSource.Type", "mysql")
+	viper.SetDefault("DataSource.Table", "version")
+	viper.SetDefault("Path", "./sqlCommandVersion")
+
 	var conf Config
 	if err := viper.Unmarshal(&conf); err != nil {
 		fmt.Errorf("error:%+v", err)
 		return nil
 	}
+
 	return &conf
 }
