@@ -10,29 +10,31 @@ type (
 
 	SqlFile struct {
 		Version
+
 		Path string
 	}
 )
 
 func (f SqlFile) VersionNo() string {
-	return f.Version.Format(_datetimeLayout)
+	return f.Version.Format(DatetimeLayout)
 }
 
 func MustVersionOfFileName(fileName string) Version {
-	version, err := time.Parse(_datetimeLayout, getVersionNo(fileName))
+	version, err := time.Parse(DatetimeLayout, getVersionNo(fileName))
 	if err != nil {
 		panic(err)
 	}
+
 	return version
 }
 
 func VersionOfFileName(fileName string) (Version, error) {
-	return time.Parse(_datetimeLayout, getVersionNo(fileName))
+	return time.Parse(DatetimeLayout, getVersionNo(fileName))
 }
 
 // 通过版本号获取当前版本
 func VersionOfVersionNo(versionNo string) (Version, error) {
-	return time.Parse(_datetimeLayout, versionNo)
+	return time.Parse(DatetimeLayout, versionNo)
 }
 
 // 通过文件名获取版本

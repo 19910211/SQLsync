@@ -50,7 +50,7 @@ func (s SyncLogic) NewSqlVersionCommand() {
 	}
 
 	// 获取文件路径
-	fileName = filepath.Join(dirPath, fmt.Sprintf("%s-%s.sql", datetime.Format(_datetimeLayout), fileName))
+	fileName = filepath.Join(dirPath, fmt.Sprintf("%s-%s.sql", datetime.Format(DatetimeLayout), fileName))
 
 	// 创建文件
 	if f1, err := os.Create(fileName); err != nil {
@@ -80,7 +80,8 @@ func (s SyncLogic) SyncVersionCommand() {
 
 	// 同步数据
 	if err := s.sync(sqlFileList); err != nil {
-		fmt.Println(fmt.Sprintf(""))
+		fmt.Println(fmt.Sprintf("同步失败：error:%+v", err))
+		return
 	}
 }
 
@@ -189,7 +190,7 @@ func dirFilter(currentVersion Version) func(info fs.FileInfo) bool {
 		case 4: // 年
 			year, err := strconv.Atoi(info.Name())
 			if err != nil {
-				fmt.Println(fmt.Sprintf("%s %s 解析报错", info.Name(), _yearsLayout))
+				fmt.Println(fmt.Sprintf("%s %s 解析报错", info.Name(), YearsLayout))
 				return false
 			}
 			// 过滤掉 版本之前的年
@@ -197,7 +198,7 @@ func dirFilter(currentVersion Version) func(info fs.FileInfo) bool {
 		case 2: // 月
 			month, err := strconv.Atoi(info.Name())
 			if err != nil {
-				fmt.Println(fmt.Sprintf("%s %s 解析报错", info.Name(), _monthLayout))
+				fmt.Println(fmt.Sprintf("%s %s 解析报错", info.Name(), MonthLayout))
 				return false
 			}
 			// 过滤掉 版本之前的月
