@@ -242,6 +242,6 @@ func GetFileList(rootPath string, dirFilter, fileFilter func(info fs.FileInfo) b
 	}
 
 	// 升序
-	sort.Slice(sqlFileList, func(i, j int) bool { return sqlFileList[i].Version.Before(sqlFileList[i].Version) })
+	sort.Slice(sqlFileList, func(i, j int) bool { return sqlFileList[i].Version.Before(sqlFileList[j].Version) })
 	return sqlFileList
 }
