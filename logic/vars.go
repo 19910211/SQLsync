@@ -12,4 +12,6 @@ const (
 	SyncVersion = "sync" // 同步sql版本
 )
 
+const SqlCommandExt = ".sql"
+
 var EmptyVersion = Version{} // 空版本

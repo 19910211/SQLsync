@@ -42,15 +42,15 @@ func (s SyncLogic) NewSqlVersionCommand() {
 	}
 
 	datetime := time.Now().Local()
-	// 获取目录
+	// 获取目录 年/月
 	dirPath := filepath.Join(s.svcCtx.Config.Path, strconv.Itoa(datetime.Year()), strconv.Itoa(int(datetime.Month())))
 	if err := os.MkdirAll(dirPath, os.ModePerm); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// 获取文件路径
-	fileName = filepath.Join(dirPath, fmt.Sprintf("%s-%s.sql", datetime.Format(DatetimeLayout), fileName))
+	// 获取文件路径 年/月/version_no-filename.sql
+	fileName = filepath.Join(dirPath, fmt.Sprintf("%s-%s%s", datetime.Format(DatetimeLayout), fileName, SqlCommandExt))
 
 	// 创建文件
 	if f1, err := os.Create(fileName); err != nil {
@@ -68,6 +68,16 @@ func (s SyncLogic) SyncVersionCommand() {
 	currentVersion, err := s.GetCurrentVersion()
 	if err != nil {
 		fmt.Println("获取版本号错误", fmt.Sprintf("error:%+v", err))
+		return
+	}
+
+	// 判断文件是否存在
+	if _, err := os.Stat(s.svcCtx.Config.Path); err != nil {
+		if os.IsNotExist(err) {
+			fmt.Println(fmt.Sprintf("文件夹不存在 %s", s.svcCtx.Config.Path))
+			return
+		}
+		fmt.Println(fmt.Sprintf("error:%+v", err))
 		return
 	}
 
@@ -166,7 +176,7 @@ func fileFilter(currentVersion Version) func(info fs.FileInfo) bool {
 	return func(info fs.FileInfo) bool {
 		fileName := info.Name()
 		// 判断是否是sql文件
-		if filepath.Ext(fileName) == "sql" {
+		if filepath.Ext(fileName) != SqlCommandExt {
 			return false
 		}
 
@@ -175,9 +185,8 @@ func fileFilter(currentVersion Version) func(info fs.FileInfo) bool {
 			return false
 		}
 
-		version := MustVersionOfFileName(fileName)
 		// 判断版本是否在当前版本之后
-		return version.After(currentVersion)
+		return MustVersionOfFileName(fileName).After(currentVersion)
 	}
 }
 
@@ -218,7 +227,7 @@ func GetFileList(rootPath string, dirFilter, fileFilter func(info fs.FileInfo) b
 
 	list, err := ioutil.ReadDir(rootPath)
 	if err != nil {
-		fmt.Println("获取文件列表错误")
+		fmt.Println(fmt.Sprintf("获取文件列表错误:error:%+v", err))
 		return nil
 	}
 
