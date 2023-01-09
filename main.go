@@ -22,7 +22,7 @@ func main() {
 	defer exit(svcCtx)
 
 	// 等待指令
-	logic.OnStandby(svcCtx)
+	logic.ScanCommand(svcCtx)
 }
 
 func exit(svcCtx *svc.ServiceContext) {
