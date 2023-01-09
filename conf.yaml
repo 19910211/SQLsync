@@ -1,7 +1,6 @@
 DataSource:
-  Type: postgres
-  Table: sql_version.version
-  Url: postgres://postgres:dinghao8888@122.112.230.215:5432/demacia?sslmode=disable
-  #  Url: root:root@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True
+  Type: mysql
+  Table: version
+  Url: root:root@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True
 
 #Path: ./sqlCommandVersion
