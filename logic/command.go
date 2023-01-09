@@ -3,7 +3,6 @@ package logic
 import (
 	"SQLsync/common"
 	"SQLsync/logic/command"
-	_ "SQLsync/logic/command"
 	"SQLsync/svc"
 )
 
