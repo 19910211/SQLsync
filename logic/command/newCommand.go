@@ -30,7 +30,7 @@ func (c *NewSqlVersionCommand) Execute(svcCtx *svc.ServiceContext) {
 
 	datetime := time.Now().Local()
 	// 获取目录 年/月
-	dirPath := filepath.Join(svcCtx.Config.Path, datetime.Format("2006"), datetime.Format("01"))
+	dirPath := filepath.Join(svcCtx.Config.Path, datetime.Format(common.YearsLayout), datetime.Format(common.MonthLayout))
 	if err := os.MkdirAll(dirPath, os.ModePerm); err != nil {
 		fmt.Println(err)
 		return
